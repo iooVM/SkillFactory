@@ -15,17 +15,30 @@ class Exclusion:
                 return coordinates
             else BoardOutException('Неверные координаты'),
 
-
+# Класс корабль
 class Ship:
-    def __init__(self, size,count, x,y):
+    def __init__(self, size,dotship,direction,health):
+        #Длина корабля
         self.size = size
-        self.count = count
+        #Координаты носа корабль
+        self.dotship = dotship
+        #Направление корабля
+        self.direction = direction
+        #Жизни
+        self.health = health
+    #Возвращает список всех точек корабля
+    def dots(self):
+
+    def
+#класс доска
+class Board:
+    def __init__(self, size):
+        poleX0 = [['-' for j in range(x)] for i in range(y)]
+        self.size = size
+class Dot:
+    def __init__(self, size, Player):
         self.x = x
         self.y = y
-    def
-
-class Board:
-    def __init__(self, size, Player):
 
 
 if __name__ == '__main__':
