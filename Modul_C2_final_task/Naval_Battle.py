@@ -47,13 +47,13 @@ class Dot:
 
 # Класс корабль
 class Ship:
-    def __init__(self, size,dotship,direction = True):
+    def __init__(self, size,dotship,direction = False):
         #Длина корабля
         self.size = size
 #        print(size)
         #Координаты носа корабль
         self.dotship = dotship
-        #Направление корабля, по умолчанию горизонталь, т.е. True
+        #Направление корабля, по умолчанию вертикали, т.е. False
         self.direction = direction
         #Жизни
         self.health = size
@@ -65,9 +65,9 @@ class Ship:
     def dots(self):
         # Заполнение по горизонтале или вертикале
         if self.direction:
-            self.shipdots = [(Dot(self.dotship.x + i,self.dotship.y)) for i in range(self.size)]
+            self.shipdots = [(Dot((self.dotship.x -1 ) + i,(self.dotship.y - 1 ))) for i in range(self.size)]
         else:
-            self.shipdots = [(Dot(self.dotship.x,self.dotship.y + i)) for i in range(self.size)]
+            self.shipdots = [(Dot((self.dotship.x - 1),(self.dotship.y -1 + i))) for i in range(self.size)]
 
         return self.shipdots
 
@@ -78,7 +78,7 @@ class Ship:
 
 #Класс поле
 class Board:
-    def __init__(self,):
+    def __init__(self):
         #Двумерный список, в котором хранятся состояния каждой из клеток.
         self.board_player = [['О' for i in range(6)] for j in range(6)]
         #Список кораблей на доске
@@ -88,13 +88,24 @@ class Board:
         #Количество живых кораблей на доске.
         self.count_ive_ships = 0
 
+    #Добавление корабля на доску
+    def add_ship(self, addship):
+        for i in range(len(addship)):
+
+#            print(addship[i].x,addship[i].y)
+            self.board_player[addship[i].x] [addship[i].y] = "■"
+        pass
 
 
-# Печатаем поле
-def print_pole(pole):
-    print('    ', *range(1,len(pole)+1))
-    for i in range(len(pole)):
-        print('',i+1,'|', *pole[i])
+
+    # Печатаем поле
+    def print_pole(self):
+        print('    ', *range(1, len(self.board_player) + 1))
+        for i in range(len(self.board_player)):
+            print('', i + 1, '|', *self.board_player[i])
+
+
+
 
 
 
@@ -102,12 +113,13 @@ if __name__ == '__main__':
     p1=Dot(1,2)
     p2=Dot(1,2)
 #    print_pole(Pole)
-    Ship1=Ship(5,p1,True)
+    Ship1=Ship(3,p1,True)
     Ship1.dots()
     Board1 = Board()
 #    print(Board1.board_player)
-    print_pole(Board1.board_player)
-
+    Board1.print_pole()
+    Board1.add_ship(Ship1.shipdots)
+    Board1.print_pole()
 
 
 
