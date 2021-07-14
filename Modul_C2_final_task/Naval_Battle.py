@@ -17,16 +17,6 @@
 #
 #     def
 
-
-# Нарисуем ручками поле
-Pole = [[ 'О','О','О','О','О','О'],
- ['О','О','О','О','О','О'],
- ['О','О','О','О','О','О'],
- ['О','О','О','О','О','О'],
- ['О','О','О','О','О','О'],
- ['О','О','О','О','О','О']]
-
-
 #Класс точек на поле
 class Dot:
     def __init__(self, x, y):
@@ -86,6 +76,20 @@ class Ship:
     # def __str__(self):
     #  return f'{self.shipdots}'
 
+#Класс поле
+class Board:
+    def __init__(self,):
+        #Двумерный список, в котором хранятся состояния каждой из клеток.
+        self.board_player = [['О' for i in range(6)] for j in range(6)]
+        #Список кораблей на доске
+        self.ships = []
+        #Показывать ли поле, по умолчанию False
+        self.hidden = False
+        #Количество живых кораблей на доске.
+        self.count_ive_ships = 0
+
+
+
 # Печатаем поле
 def print_pole(pole):
     print('    ', *range(1,len(pole)+1))
@@ -97,13 +101,20 @@ def print_pole(pole):
 if __name__ == '__main__':
     p1=Dot(1,2)
     p2=Dot(1,2)
-    print_pole(Pole)
+#    print_pole(Pole)
     Ship1=Ship(5,p1,True)
     Ship1.dots()
-    print(type(Ship1))
-    print(Ship1.shipdots)
-    print(type(Ship1.shipdots))
-    print(Ship1.size)
-    for i in range(len(Ship1.shipdots)):
-        temp = Ship1.shipdots[i]
-        print(temp.x,temp.y)
+    Board1 = Board()
+#    print(Board1.board_player)
+    print_pole(Board1.board_player)
+
+
+
+
+    # print(type(Ship1))
+    # print(Ship1.shipdots)
+    # print(type(Ship1.shipdots))
+    # print(Ship1.size)
+    # for i in range(len(Ship1.shipdots)):
+    #     temp = Ship1.shipdots[i]
+    #     print(temp.x,temp.y)
