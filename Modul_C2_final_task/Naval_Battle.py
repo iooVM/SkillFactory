@@ -16,18 +16,7 @@
 #             else BoardOutException('Неверные координаты'),
 #
 #     def
-# #класс доска
-# class Board:
-#     def __init__(self, size):
-#         poleX0 = [['-' for j in range(x)] for i in range(y)]
-#         self.size = size
 
-# Pole = [ ['О'],['О'],['О'],['О'],['О'],['О'],
-#  ['О'],['О'],['О'],['О'],['О'],['О'],
-#  ['О'],['О'],['О'],['О'],['О'],['О'],
-#  ['О'],['О'],['О'],['О'],['О'],['О'],
-#  ['О'],['О'],['О'],['О'],['О'],['О'],
-#  ['О'],['О'],['О'],['О'],['О'],['О']]
 
 # Нарисуем ручками поле
 Pole = [[ 'О','О','О','О','О','О'],
@@ -58,10 +47,12 @@ class Dot:
     #         self.y = y
 
     # Для сравнение точек
+
     def __eq__(self,other):
         return self.x==other.x and self.y==other.y
-    def __str__(self):
-        return f' X:{self.x}, Y:{self.y}'
+    # # Для вывода на экра координат точек
+    # def __str__(self):
+    #     return f' X:{self.x}, Y:{self.y}'
 
 # Класс корабль
 class Ship:
@@ -81,25 +72,18 @@ class Ship:
 
         #Возвращает список всех точек корабля
     def dots(self):
-
-        if self.size > 1:
-            pass
+        # Заполнение по горизонтале или вертикале
+        if self.direction:
+            self.shipdots = [(Dot(self.dotship.x + i,self.dotship.y)) for i in range(self.size)]
         else:
-#            print(self.dotship)
-            self.shipdots.append(self.dotship)
-#            print(self.shipdots)
-            return self.shipdots
+            self.shipdots = [(Dot(self.dotship.x,self.dotship.y + i)) for i in range(self.size)]
 
-        # if size:
-        #     if direction dotship
-        # return shipdots
-        #  По умолчанию по горизонтали
+        return self.shipdots
 
-        pass
-
-
+    # def __str__(self):
+    #     return f'Ship: Размер: {self.size},Координаты носа:{self.dotship}, Направление корабля {self.direction }, жизни: {self.health}'
     def __str__(self):
-        return f'Ship: Размер: {self.size},Координаты носа:{self.dotship}, Направление корабля {self.direction }, жизни: {self.health}'
+     return f'{self.shipdots}'
 
 def print_pole(pole):
     print('    ', *range(1,len(pole)+1))
@@ -111,20 +95,13 @@ def print_pole(pole):
 if __name__ == '__main__':
     p1=Dot(1,2)
     p2=Dot(1,2)
-    # print(p1==p2)
-    # print(str(p1))
-    # print(p2)
     print_pole(Pole)
-    # print(p1.x)
-    # print(p1.y)
-    Ship1=Ship(1,p1,True)
-    #print(type(Ship1.dots()))
-    print(Ship1)
-    Ship1Dots = Ship1.dots()
-#    print(Ship1Dots)
-    # for i in Ship1Dots:
-    #     print('1',i)
-
-# print(Pole)
-# print('test')
-
+    Ship1=Ship(5,p1,True)
+    Ship1.dots()
+    print(type(Ship1))
+    print(Ship1.shipdots)
+    print(type(Ship1.shipdots))
+    print(Ship1.size)
+    for i in range(len(Ship1.shipdots)):
+        temp = Ship1.shipdots[i]
+        print(temp.x,temp.y)
