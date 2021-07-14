@@ -30,6 +30,7 @@ Pole = [[ 'О','О','О','О','О','О'],
 #Класс точек на поле
 class Dot:
     def __init__(self, x, y):
+        #координаты точки
          self.x = x
          self.y = y
     # # Геттер и сеттер для Х
@@ -47,7 +48,7 @@ class Dot:
     #         self.y = y
 
     # Для сравнение точек
-
+    # Для сравнение точек  и/или поиска в списке точек через in
     def __eq__(self,other):
         return self.x==other.x and self.y==other.y
     # # Для вывода на экра координат точек
@@ -67,7 +68,7 @@ class Ship:
         #Жизни
         self.health = size
         ## Массив координат корабля, к примеру Ship.dots() = [Dot,Dot,Dot]
-        self.shipdots = []
+        # self.shipdots = []
 
 
         #Возвращает список всех точек корабля
@@ -80,11 +81,12 @@ class Ship:
 
         return self.shipdots
 
+    # # def __str__(self):
+    # #     return f'Ship: Размер: {self.size},Координаты носа:{self.dotship}, Направление корабля {self.direction }, жизни: {self.health}'
     # def __str__(self):
-    #     return f'Ship: Размер: {self.size},Координаты носа:{self.dotship}, Направление корабля {self.direction }, жизни: {self.health}'
-    def __str__(self):
-     return f'{self.shipdots}'
+    #  return f'{self.shipdots}'
 
+# Печатаем поле
 def print_pole(pole):
     print('    ', *range(1,len(pole)+1))
     for i in range(len(pole)):
