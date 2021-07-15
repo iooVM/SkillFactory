@@ -1,21 +1,16 @@
-# #класс исключения
-# #len - длина квадратной доски
+
+# # Класс проверки координат
 # class Exclusion:
-#     def __init__(self, x,y,len):
+#     def __init__(self, x,y,len = 6 ):
 #         self.x = x
 #         self.y = y
 #         self.len = len
-#     @out_coordinates.setter
-#     #
 #
-#     #Декоратор проверки координат
-#     def decorator_out_coordinates(self,coordinates):
-#         def wrapper():
+#     def check_coordinates(self,coordinates):
 #             if coordinates <= len and coordinates >= 0:
 #                 return coordinates
 #             else BoardOutException('Неверные координаты'),
-#
-#     def
+
 
 #Класс точек на поле
 class Dot:
@@ -90,14 +85,26 @@ class Board:
 
     #Добавление корабля на доску
     def add_ship(self, addship):
+        self.befo_board_player = self.board_player.copy()
         for i in range(len(addship)):
+            print(addship[i].x,addship[i].y)
+            if self.board_player[addship[i].x] [addship[i].y] != 'О':
+                #Возвращает предыдущее состояние доски
+                self.board_player = self.befo_board_player.copy()
+                print('Корабль не может быть тут размещён')
+                #raise ValueError('Корабль не может быть тут размещён')
+                break
+            else:
+                #Размещение корабля на доске
+                self.board_player[addship[i].x] [addship[i].y] = '■'
+                #Добавление корабля в список кораблей
+                self.ships.append(addship)
 
-#            print(addship[i].x,addship[i].y)
-            self.board_player[addship[i].x] [addship[i].y] = "■"
-        pass
 
 
-
+    #Обводим корабль (.)
+    # def contour(self):
+    #     pass
     # Печатаем поле
     def print_pole(self):
         print('    ', *range(1, len(self.board_player) + 1))
@@ -111,14 +118,20 @@ class Board:
 
 if __name__ == '__main__':
     p1=Dot(1,2)
-    p2=Dot(1,2)
+    p2=Dot(3,4)
 #    print_pole(Pole)
     Ship1=Ship(3,p1,True)
+    Ship2 = Ship(3, p2, True)
     Ship1.dots()
+    Ship2.dots()
     Board1 = Board()
 #    print(Board1.board_player)
     Board1.print_pole()
     Board1.add_ship(Ship1.shipdots)
+    Board1.add_ship(Ship2.shipdots)
+    # except ValueError:
+    #     print('Корабль не может быть тут размещён')
+
     Board1.print_pole()
 
 
