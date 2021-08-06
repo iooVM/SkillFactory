@@ -376,5 +376,3 @@ if __name__ == '__main__':
     g.start()
 # print(Pole)
 # print('test')
-# test
-# test2
