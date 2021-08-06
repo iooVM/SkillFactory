@@ -1,5 +1,6 @@
-#импорт генератора случайных целых чисел
+# импорт генератора случайных целых чисел
 from random import randint
+
 
 # Pole = [ ['О'],['О'],['О'],['О'],['О'],['О'],
 #  ['О'],['О'],['О'],['О'],['О'],['О'],
@@ -124,7 +125,7 @@ class Board:
         self.busy = []
         # Корабли
         self.ships = []
-        #Число ходов
+        # Число ходов
         self.count = 0
 
     # def __str__(self):
@@ -155,31 +156,33 @@ class Board:
     # проверка на попадание в доску
     def out(self, d):
         return not ((0 <= d.x < self.size) and (0 <= d.y < self.size))
+
     # добавление корадля на доску
     def add_ship(self, ship):
         for d in ship.dots:
             # Если точка занята, выдаём исключение
             if self.out(d) or d in self.busy:
                 raise BoardWrongShipException()
-        #Рисуем корабль
+        # Рисуем корабль
         for d in ship.dots:
             self.pole[d.x][d.y] = "■"
             self.busy.append(d)
 
         self.ships.append(ship)
         self.contour(ship)
-    #Стреляем
+
+    # Стреляем
     def shot(self, d):
-        #Если вне доски выдём исключение внедоски
+        # Если вне доски выдём исключение внедоски
         if self.out(d):
             raise BoardOutException()
         # Если клетка занята Исключение при повторном выстреле
         if d in self.busy:
             raise BoardUsedException()
-        #Добавляем точку в список занятых
+        # Добавляем точку в список занятых
         self.busy.append(d)
 
-        #Проверка на попадание
+        # Проверка на попадание
         for ship in self.ships:
             # Если попдание в корабль
             if d in ship.dots:
@@ -189,7 +192,7 @@ class Board:
                 # Если корабль унечтожен
                 if ship.health == 0:
                     self.count += 1
-                    self.contour(ship, verb = True)
+                    self.contour(ship, verb=True)
                     print("Корабль уничтожен!")
                     return False
                 else:
@@ -198,20 +201,24 @@ class Board:
         self.pole[d.x][d.y] = "."
         print("Мимо!")
         return False
-    #Начало игры с пустой доской
+
+    # Начало игры с пустой доской
     def begin(self):
         self.busy = []
+
 
 # класс игрока
 class Player:
     def __init__(self, board, enemy):
-        #Доска игрока
+        # Доска игрока
         self.board = board
-        #Кто играет
+        # Кто играет
         self.enemy = enemy
+
     # Пустой метод для потомков класса, запрос на выстрел
     def ask(self):
         raise NotImplementedError()
+
     #
     def move(self):
         while True:
@@ -222,6 +229,7 @@ class Player:
             except BoardException as e:
                 print(e)
 
+
 # Дочерний класс для ИИ
 class AI(Player):
     def ask(self):
@@ -229,6 +237,7 @@ class AI(Player):
         d = Dot(randint(0, 5), randint(0, 5))
         print(f"Ход компьютера: {d.x + 1} {d.y + 1}")
         return d
+
 
 # Дочерний класс Игрока ( человека из консоли)
 class User(Player):
@@ -251,12 +260,13 @@ class User(Player):
 
             return Dot(x - 1, y - 1)
 
-#Класс игра
+
+# Класс игра
 class Game:
     def __init__(self, size=6):
-        #Размер доски
+        # Размер доски
         self.size = size
-        #Генерируем доску пользователя в случайном порядке, т.к. на проверке лениво самому расставлять
+        # Генерируем доску пользователя в случайном порядке, т.к. на проверке лениво самому расставлять
         pl = self.random_board()
         # Генерируем скрытую доску ИИ
         co = self.random_board()
@@ -267,9 +277,9 @@ class Game:
         self.us = User(pl, co)
 
     def try_board(self):
-        #Какие корабли и сколько
+        # Какие корабли и сколько
         lens = [3, 2, 2, 1, 1, 1, 1]
-        #Рисуем доску
+        # Рисуем доску
         board = Board(size=self.size)
         # Счётчик попыток случайного располежения кораблей
         attempts = 0
@@ -290,14 +300,15 @@ class Game:
                     pass
         board.begin()
         return board
-    #Генерим поле кораблей, если не получилось, пробуем ещё раз
+
+    # Генерим поле кораблей, если не получилось, пробуем ещё раз
     def random_board(self):
         board = None
         while board is None:
             board = self.try_board()
         return board
 
-    #Приветствие перед началом игры
+    # Приветствие перед началом игры
     def greet(self):
         print("-------------------")
         print("  Приветсвуем вас  ")
@@ -307,6 +318,7 @@ class Game:
         print(" формат ввода: x y ")
         print(" x - номер строки  ")
         print(" y - номер столбца ")
+
     # Цикл игры
     def loop(self):
         # Номер хода
@@ -339,10 +351,12 @@ class Game:
                 print("Компьютер выиграл!")
                 break
             num += 1
+
     # Метод для запуска игры
     def start(self):
         self.greet()
         self.loop()
+
 
 if __name__ == '__main__':
     # # p1=Dot(1,2)
@@ -362,5 +376,5 @@ if __name__ == '__main__':
     g.start()
 # print(Pole)
 # print('test')
-#test
-#test2
+# test
+# test2
