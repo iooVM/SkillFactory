@@ -82,7 +82,7 @@ class Ship:
         self.health = size
 
     # Координаты точек корабля
-    #    @property
+    @property
     def dots(self):
         # Массив координат корабля, к примеру Ship.dots() = [Dot,Dot,Dot]
         shipdots = []
@@ -103,7 +103,7 @@ class Ship:
 
     # Проверка на попадание в корабль
     def hited(self, hit):
-        return hit in self.dots()
+        return hit in self.dots
 
 
 # def print_pole(pole):
