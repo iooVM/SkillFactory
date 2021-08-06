@@ -171,6 +171,23 @@ class Board:
         # Если клетка занята Исключение при повторном выстреле
         if d in self.busy:
             raise BoardUsedException()
+        #Добавляем точку в список занятых
+        self.busy.append(d)
+
+        #Проверка на попадание
+        for ship in self.ships:
+            if d in ship.dots:
+                ship.lives -= 1
+                self.pole[d.x][d.y] = "X"
+                if ship.lives == 0:
+                    self.count += 1
+                    self.contour(ship, verb = True)
+                    print("Корабль уничтожен!")
+                    return False
+                else:
+                    print("Корабль ранен!")
+                    return True
+
 
 if __name__ == '__main__':
     # p1=Dot(1,2)
