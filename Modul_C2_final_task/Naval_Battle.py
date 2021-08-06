@@ -1,3 +1,6 @@
+#импорт генератора случайных целых чисел
+from random import randint
+
 # Pole = [ ['О'],['О'],['О'],['О'],['О'],['О'],
 #  ['О'],['О'],['О'],['О'],['О'],['О'],
 #  ['О'],['О'],['О'],['О'],['О'],['О'],
@@ -121,6 +124,8 @@ class Board:
         self.busy = []
         # Корабли
         self.ships = []
+        #Число ходов
+        self.count = 0
 
     # def __str__(self):
     #     return f'{self.pole}'
@@ -156,7 +161,7 @@ class Board:
             # Если точка занята, выдаём исключение
             if self.out(d) or d in self.busy:
                 raise BoardWrongShipException()
-
+        #Рисуем корабль
         for d in ship.dots:
             self.pole[d.x][d.y] = "■"
             self.busy.append(d)
@@ -176,10 +181,13 @@ class Board:
 
         #Проверка на попадание
         for ship in self.ships:
+            # Если попдание в корабль
             if d in ship.dots:
-                ship.lives -= 1
+                # Отнимаем жизнь
+                ship.health -= 1
                 self.pole[d.x][d.y] = "X"
-                if ship.lives == 0:
+                # Если корабль унечтожен
+                if ship.health == 0:
                     self.count += 1
                     self.contour(ship, verb = True)
                     print("Корабль уничтожен!")
@@ -187,7 +195,59 @@ class Board:
                 else:
                     print("Корабль ранен!")
                     return True
+        self.pole[d.x][d.y] = "."
+        print("Мимо!")
+        return False
+    #Начало игры с пустой доской
+    def begin(self):
+        self.busy = []
 
+# класс игрока
+class Player:
+    def __init__(self, board, enemy):
+        #Доска игрока
+        self.board = board
+        #Кто играет
+        self.enemy = enemy
+    # Мустой метод для потомков класса
+    def ask(self):
+        raise NotImplementedError()
+    #
+    def move(self):
+        while True:
+            try:
+                target = self.ask()
+                repeat = self.enemy.shot(target)
+                return repeat
+            except BoardException as e:
+                print(e)
+
+# Дочерний класс для ии
+class AI(Player):
+    def ask(self):
+        d = Dot(randint(0, 5), randint(0, 5))
+        print(f"Ход компьютера: {d.x + 1} {d.y + 1}")
+        return d
+
+
+class User(Player):
+    def ask(self):
+        while True:
+            cords = input("Ваш ход: ").split()
+
+            if len(cords) != 2:
+                print(" Введите 2 координаты! ")
+                continue
+
+            x, y = cords
+
+            if not (x.isdigit()) or not (y.isdigit()):
+                print(" Введите числа! ")
+                continue
+
+            x, y = int(x), int(y)
+
+            return Dot(x - 1, y - 1)
 
 if __name__ == '__main__':
     # p1=Dot(1,2)
