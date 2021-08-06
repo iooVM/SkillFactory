@@ -209,7 +209,7 @@ class Player:
         self.board = board
         #Кто играет
         self.enemy = enemy
-    # Мустой метод для потомков класса
+    # Пустой метод для потомков класса, запрос на выстрел
     def ask(self):
         raise NotImplementedError()
     #
@@ -222,15 +222,17 @@ class Player:
             except BoardException as e:
                 print(e)
 
-# Дочерний класс для ии
+# Дочерний класс для ИИ
 class AI(Player):
     def ask(self):
+        # Случайный выстрел в клетку
         d = Dot(randint(0, 5), randint(0, 5))
         print(f"Ход компьютера: {d.x + 1} {d.y + 1}")
         return d
 
-
+# Дочерний класс Игрока ( человека из консоли)
 class User(Player):
+    # Запрос на выстрел
     def ask(self):
         while True:
             cords = input("Ваш ход: ").split()
@@ -249,20 +251,115 @@ class User(Player):
 
             return Dot(x - 1, y - 1)
 
-if __name__ == '__main__':
-    # p1=Dot(1,2)
-    # p2=Dot(1,2)
-    # print(p1==p2)
-    # print(str(p1))
-    # print(p2)
-    # # print_pole(Pole)
-    # #Тестовый кораблик
-    # ship_test = Ship(p1, 3, False)
-    # print(ship_test.dots())
-    # print(ship_test.hited(Dot(0, 3)))
-    b = Board()
-    print(b)
+#Класс игра
+class Game:
+    def __init__(self, size=6):
+        #Размер доски
+        self.size = size
+        #Генерируем доску пользователя в случайном порядке, т.к. на проверке лениво самому расставлять
+        pl = self.random_board()
+        # Генерируем скрытую доску ИИ
+        co = self.random_board()
+        co.hid = True
 
+        # Экземпляры досок игрока и ИИ
+        self.ai = AI(co, pl)
+        self.us = User(pl, co)
+
+    def try_board(self):
+        #Какие корабли и сколько
+        lens = [3, 2, 2, 1, 1, 1, 1]
+        #Рисуем доску
+        board = Board(size=self.size)
+        # Счётчик попыток случайного располежения кораблей
+        attempts = 0
+        # расположение кораблей
+
+        for l in lens:
+            while True:
+                attempts += 1
+                if attempts > 2000:
+                    return None
+                # случайное рассположение корабля
+                ship = Ship(Dot(randint(0, self.size), randint(0, self.size)), l, randint(0, 1))
+                # попытка раместить корабль на доску
+                try:
+                    board.add_ship(ship)
+                    break
+                except BoardWrongShipException:
+                    pass
+        board.begin()
+        return board
+    #Генерим поле кораблей, если не получилось, пробуем ещё раз
+    def random_board(self):
+        board = None
+        while board is None:
+            board = self.try_board()
+        return board
+
+    #Приветствие перед началом игры
+    def greet(self):
+        print("-------------------")
+        print("  Приветсвуем вас  ")
+        print("      в игре       ")
+        print("    морской бой    ")
+        print("-------------------")
+        print(" формат ввода: x y ")
+        print(" x - номер строки  ")
+        print(" y - номер столбца ")
+    # Цикл игры
+    def loop(self):
+        # Номер хода
+        num = 0
+        # Интерфейс игры
+        while True:
+            print("-" * 20)
+            print("Доска пользователя:")
+            print(self.us.board)
+            print("-" * 20)
+            print("Доска компьютера:")
+            print(self.ai.board)
+            print("-" * 20)
+            if num % 2 == 0:
+                print("Ходит пользователь!")
+                repeat = self.us.move()
+            else:
+                print("Ходит компьютер!")
+                repeat = self.ai.move()
+            if repeat:
+                num -= 1
+
+            if self.ai.board.count == 7:
+                print("-" * 20)
+                print("Пользователь выиграл!")
+                break
+
+            if self.us.board.count == 7:
+                print("-" * 20)
+                print("Компьютер выиграл!")
+                break
+            num += 1
+    # Метод для запуска игры
+    def start(self):
+        self.greet()
+        self.loop()
+
+if __name__ == '__main__':
+    # # p1=Dot(1,2)
+    # # p2=Dot(1,2)
+    # # print(p1==p2)
+    # # print(str(p1))
+    # # print(p2)
+    # # # print_pole(Pole)
+    # # #Тестовый кораблик
+    # # ship_test = Ship(p1, 3, False)
+    # # print(ship_test.dots())
+    # # print(ship_test.hited(Dot(0, 3)))
+    # b = Board()
+    # print(b)
+    # Играем
+    g = Game()
+    g.start()
 # print(Pole)
 # print('test')
 #test
